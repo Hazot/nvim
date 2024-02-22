@@ -10,7 +10,6 @@ return require('packer').startup(function(use)
     -- Simple plugins can be specified as strings
     use('rstacruz/vim-closer')
 
-
     -- Core
     use("nvim-lua/plenary.nvim") -- don't forget to add this one if you don't have it yet!
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
