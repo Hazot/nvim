@@ -16,7 +16,7 @@ return require('packer').startup(function(use)
     use('nvim-treesitter/playground')
     use({
         'nvim-telescope/telescope.nvim',
-        tag = '0.1.5',
+        tag = '0.1.6',
         requires = { { 'nvim-lua/plenary.nvim' } }
     })
 
