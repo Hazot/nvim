@@ -75,6 +75,10 @@ return require('packer').startup(function(use)
         },
     }
 
+    -- Debugging tool
+    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"} }
+
+
     -- Add/delete/change surrounding pairs
     use({
         "kylechui/nvim-surround",
