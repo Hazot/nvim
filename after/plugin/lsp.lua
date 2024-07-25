@@ -79,7 +79,14 @@ lspconfig.lua_ls.setup {
             client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
         end
         return true
-    end
+    end,
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { 'vim' }
+            }
+        }
+    }
 }
 lspconfig.rust_analyzer.setup({})
 
