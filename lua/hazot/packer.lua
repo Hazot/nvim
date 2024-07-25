@@ -24,13 +24,7 @@ return require('packer').startup(function(use)
     use('mbbill/undotree')
 
     -- colorscheme
-    use({
-        'rose-pine/neovim',
-        as = 'rose-pine',
-        config = function()
-            vim.cmd [[colorscheme rose-pine-moon]]
-        end
-    })
+    use 'navarasu/onedark.nvim'
 
 
     -- The best plugin
@@ -75,8 +69,8 @@ return require('packer').startup(function(use)
         },
     }
 
-    -- Debugging tool
-    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"} }
+    -- Debugging tool (debugger or DAP)
+    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } }
 
 
     -- Add/delete/change surrounding pairs
