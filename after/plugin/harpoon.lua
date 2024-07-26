@@ -1,8 +1,6 @@
 local harpoon = require("harpoon")
 
 -- REQUIRED
-harpoon:setup()
-
 harpoon.setup({
     settings = {
         -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.

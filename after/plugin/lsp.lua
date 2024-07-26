@@ -50,7 +50,7 @@ require('mason-lspconfig').setup({
 })
 
 
-lspconfig.pyright.setup {}
+lspconfig.basedpyright.setup {}
 lspconfig.lua_ls.setup {
     on_init = function(client)
         local path = client.workspace_folders[1].name

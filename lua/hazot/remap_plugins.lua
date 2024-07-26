@@ -1,6 +1,6 @@
 -- Copilot enable/disable
-vim.keymap.set("n", "<leader>ce", [[:Copilot enable<CR>]], { desc = "Copilot" })
-vim.keymap.set("n", "<leader>cd", [[:Copilot disable<CR>]], { desc = "Copilot" })
+vim.keymap.set("n", "<leader>ce", [[:Copilot enable<CR>]], { noremap = true, silent = true, desc = "Enable Copilot" })
+vim.keymap.set("n", "<leader>cd", [[:Copilot disable<CR>]], { noremap = true, silent = true, desc = "Disable Copilot" })
 
 -- Nvim Tree
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")
