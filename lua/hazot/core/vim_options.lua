@@ -1,62 +1,68 @@
+-- Numbers
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+-- Indentation
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.autoindent = true
 
+-- Mouse
 vim.opt.mouse = "a"
 
-vim.opt.smartindent = true
+-- Wrapping
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
+vim.opt.showbreak = "↪"
 
-vim.opt.wrap = false
-
+-- Backup and undo
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 
+vim.opt.hidden = true
+
+-- Search
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
+vim.opt.smartcase = true
 
+-- Colors
+vim.g.have_nerd_font = true
 vim.opt.termguicolors = true
+vim.opt.background = "dark"
 
+-- Cursor
+vim.opt.cursorline = true
+vim.opt.colorcolumn = { "80", "120" }
+
+-- Other
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
-
 vim.opt.updatetime = 50
-
-vim.opt.colorcolumn = ""
-
 vim.opt.autoread = true
 
+-- Clipboard
 vim.opt.clipboard = "unnamedplus"
 
-vim.opt.wrap = false
+-- Enable incrementing hex numbers and letters
+vim.api.nvim_set_option("nrformats", "hex,alpha")
 
-vim.opt.cursorline = true
-
+-- Autocmds
 vim.api.nvim_create_autocmd('BufEnter', {
     pattern = { '*.md', '*.tex' },
     group = group,
     command = 'setlocal wrap'
 })
 
--- Enable incrementing hex numbers and letters
-vim.api.nvim_set_option("nrformats", "hex,alpha")
-
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = "cpp",
-    callback = function()
-        vim.opt_local.shiftwidth = 2
-        vim.opt_local.tabstop = 2
-    end
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "h",
+    pattern = { "cpp", "h" },
     callback = function()
         vim.opt_local.shiftwidth = 2
         vim.opt_local.tabstop = 2
