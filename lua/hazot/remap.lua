@@ -17,7 +17,6 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("x", "<leader>p", "\"_dP")
 
 -- Format on key press
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 vim.keymap.set("n", "<C-I>", vim.lsp.buf.format)
 vim.keymap.set("n", "<A-F>", vim.lsp.buf.format)
 
