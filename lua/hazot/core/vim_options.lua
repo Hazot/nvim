@@ -64,7 +64,8 @@ vim.api.nvim_create_autocmd('BufEnter', {
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "cpp", "h" },
     callback = function()
-        vim.opt_local.shiftwidth = 2
-        vim.opt_local.tabstop = 2
+        -- Can set to 2 here if I want
+        vim.opt_local.shiftwidth = 4
+        vim.opt_local.tabstop = 4
     end
 })

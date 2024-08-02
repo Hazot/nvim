@@ -24,32 +24,34 @@ return {
             settings = {
                 Lua = {
                     diagnostics = {
-                        globals = { 'vim' }
+                        globals = { 'vim', 'group' }
                     }
                 }
             }
         })
 
         lspconfig.basedpyright.setup({
-		settings = {
-			basedpyright = {
-				disableOrganizeImports = true,
-				typeCheckingMode = "standard",
-				analysis = {
-					inlayHints = {
-						callArgumentNames = "all",
-						functionReturnTypes = true,
-						pytestParameters = true,
-						variableTypes = true,
-					},
-					autoFormatStrings = true,
-				},
-				linting = { enabled = true },
-			},
-		},
-	})
+            settings = {
+                basedpyright = {
+                    disableOrganizeImports = true,
+                    typeCheckingMode = "standard",
+                    analysis = {
+                        inlayHints = {
+                            callArgumentNames = "all",
+                            functionReturnTypes = true,
+                            pytestParameters = true,
+                            variableTypes = true,
+                        },
+                        autoFormatStrings = true,
+                    },
+                    linting = { enabled = true },
+                },
+            },
+        })
 
         lspconfig.rust_analyzer.setup({})
+
+        lspconfig.clangd.setup({})
 
         -- Keybinds
         vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
