@@ -3,8 +3,9 @@
 ## Requirements
 
 ### Ubuntu
-- `sudo apt install ripgrep fd-find`
+- `sudo apt install ripgrep`
 - `cargo install fd-find`
+- `sudo apt install python3-venv -y`
 
 ### MacOS
 - `brew install ripgrep fd sioyek`
