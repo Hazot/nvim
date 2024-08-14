@@ -63,8 +63,7 @@ return {
         vim.keymap.set("n", "gI", vim.lsp.buf.implementation, {})
         -- vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {})
         -- vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
-        -- vim.keymap.set("n", "sd", vim.lsp.diagnostic.show_line_diagnostics, {})
-        -- vim.keymap.set("n", "[d]", vim.lsp.diagnostic.goto_next, {})
-        -- vim.keymap.set("n", "]d", vim.lsp.diagnostic.goto_prev, {})
+        -- vim.keymap.set("n", "]d", vim.lsp.diagnostic.goto_next, {})
+        -- vim.keymap.set("n", "[d", vim.lsp.diagnostic.goto_prev, {})
     end,
 }
