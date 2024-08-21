@@ -14,7 +14,7 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
 -- Can delete highlight without copying it and then paste the current buffer
-vim.keymap.set("x", "<leader>p", "\"_dP")
+vim.keymap.set("x", "<leader>p", '"_dP')
 
 -- Format on key press
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
@@ -29,7 +29,7 @@ vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 -- Delete without yank
-vim.keymap.set({ "n", "v" }, "<leader>D", "\"_d")
+vim.keymap.set({ "n", "v" }, "<leader>D", '"_d')
 
 -- Only difference between escape and ctrl+c
 vim.keymap.set("i", "<C-c>", "<Esc>")
@@ -41,16 +41,14 @@ vim.keymap.set("n", "Q", "<nop>")
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
 -- Can easily replace all the words in a file
-vim.keymap.set("n", "<leader>s",
-    [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]
-)
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
 -- Fighting one-eyed kirby
 vim.keymap.set(
-    "v",
-    "<leader>k",
-    ":s/\\(\\S.*\\)/ \\1/g<left><left><left><left><left>",
-    { desc = "Fighting one-eyed kirby" }
+	"v",
+	"<leader>k",
+	":s/\\(\\S.*\\)/ \\1/g<left><left><left><left><left>",
+	{ desc = "Fighting one-eyed kirby" }
 )
 
 -- Have j and k working with word wrap
