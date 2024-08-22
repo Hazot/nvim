@@ -45,11 +45,11 @@ return {
                         "--exclude",
                         ".git",
                     },
-                }
+                },
             },
         })
 
-        ----- This activates the search for hidden files in live_grep
+        --- This activates the search for hidden files in live_grep
         require("telescope").setup({
             pickers = {
                 live_grep = {
@@ -88,6 +88,10 @@ return {
             extensions = {
                 ["ui-select"] = {
                     require("telescope.themes").get_ivy(),
+                },
+                ["fzf-native"] = {
+                    override_generic_sorter = false,
+                    override_file_sorter = true,
                 },
             },
         })

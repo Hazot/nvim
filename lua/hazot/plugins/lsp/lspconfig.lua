@@ -78,10 +78,6 @@ return {
             -- Jump to next diagnostic in buffer
             map("]d", vim.diagnostic.goto_next, "Goto next diagnostic")
 
-            -- Help with function signature
-            vim.keymap.set("i", "<leader>h>", function()
-                vim.lsp.buf.signature_help()
-            end, { desc = "Signature Help" })
         end
 
         local on_attach = function(client, bufnr)
@@ -155,7 +151,7 @@ return {
             cmd = {
                 "clangd",
                 "--fallback-style=Google",
-                "--offset_encoding=uft-8",
+                "--offset-encoding=utf-16",
             },
             capabilities = capabilities,
             on_attach = function(client, bufnr)
