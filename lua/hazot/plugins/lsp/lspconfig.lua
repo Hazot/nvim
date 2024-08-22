@@ -77,7 +77,6 @@ return {
 
             -- Jump to next diagnostic in buffer
             map("]d", vim.diagnostic.goto_next, "Goto next diagnostic")
-
         end
 
         local on_attach = function(client, bufnr)
