@@ -45,7 +45,7 @@ return {
                         "--exclude",
                         ".git",
                     },
-                },
+                }
             },
         })
 

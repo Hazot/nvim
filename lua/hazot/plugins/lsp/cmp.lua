@@ -9,8 +9,7 @@ return {
         "hrsh7th/cmp-nvim-lsp-signature-help", -- Source for function signature
         "hrsh7th/cmp-emoji", -- Source for emojis
         { "zbirenbaum/copilot-cmp", dependencies = "zbirenbaum/copilot.lua", config = true }, -- Source for copilot
-        { "saadparwaiz1/cmp_luasnip",
-            dependencies = "L3MON4D3/LuaSnip" }, -- Source for completion of LuaSnip snippets
+        { "saadparwaiz1/cmp_luasnip", dependencies = "L3MON4D3/LuaSnip" }, -- Source for completion of LuaSnip snippets
         "onsails/lspkind.nvim", -- Pictograms in completion menu
         "brenoprata10/nvim-highlight-colors", -- Highlight colors in completion menu
     },
@@ -36,14 +35,15 @@ return {
             },
 
             sources = cmp.config.sources({
+                -- { name = "supermaven" }, -- Supermaven works great outside also
                 { name = "copilot" },
-                { name = "lazydev" },
                 {
                     name = "nvim_lsp",
                     entry_filter = function(entry, ctx)
                         return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
                     end,
                 },
+                { name = "lazydev" },
                 { name = "nvim_lsp_signature_help" },
                 { name = "path" },
                 { name = "luasnip" },
@@ -63,11 +63,37 @@ return {
                 format = function(entry, item)
                     local color_item = require("nvim-highlight-colors").format(entry, { kind = item.kind })
                     item = require("lspkind").cmp_format({
-                        mode = "symbol",
-                        maxwidth = 50,
+                        mode = "symbol_text",
+                        maxwidth = 80,
                         ellipsis_char = "...",
                         symbol_map = {
+                            Supermaven = "",
                             Copilot = "",
+                            Text = "󰉿",
+                            Method = "󰆧",
+                            Function = "󰊕",
+                            Constructor = "",
+                            Field = "󰜢",
+                            Variable = "󰀫",
+                            Class = "󰠱",
+                            Interface = "",
+                            Module = "",
+                            Property = "󰜢",
+                            Unit = "󰑭",
+                            Value = "󰎠",
+                            Enum = "",
+                            Keyword = "󰌋",
+                            Snippet = "",
+                            Color = "󰏘",
+                            File = "󰈙",
+                            Reference = "󰈇",
+                            Folder = "󰉋",
+                            EnumMember = "",
+                            Constant = "󰏿",
+                            Struct = "󰙅",
+                            Event = "",
+                            Operator = "󰆕",
+                            TypeParameter = "",
                         },
                         show_labelDetails = true,
                     })(entry, item)

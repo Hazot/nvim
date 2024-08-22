@@ -16,11 +16,6 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- Can delete highlight without copying it and then paste the current buffer
 vim.keymap.set("x", "<leader>p", '"_dP')
 
--- Format on key press
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-vim.keymap.set("n", "<C-I>", vim.lsp.buf.format)
-vim.keymap.set("n", "<A-F>", vim.lsp.buf.format)
-
 -- Remap ctrl + / to gcc
 vim.keymap.set({ "n", "v" }, "<C-_>", "gcc", { desc = "Toggle commenting", remap = true })
 
@@ -45,10 +40,10 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 
 -- Fighting one-eyed kirby
 vim.keymap.set(
-	"v",
-	"<leader>k",
-	":s/\\(\\S.*\\)/ \\1/g<left><left><left><left><left>",
-	{ desc = "Fighting one-eyed kirby" }
+    "v",
+    "<leader>k",
+    ":s/\\(\\S.*\\)/ \\1/g<left><left><left><left><left>",
+    { desc = "Fighting one-eyed kirby" }
 )
 
 -- Have j and k working with word wrap
