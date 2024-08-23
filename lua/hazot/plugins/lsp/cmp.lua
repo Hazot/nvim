@@ -64,7 +64,7 @@ return {
                     local color_item = require("nvim-highlight-colors").format(entry, { kind = item.kind })
                     item = require("lspkind").cmp_format({
                         mode = "symbol_text",
-                        maxwidth = 80,
+                        maxwidth = 60,
                         ellipsis_char = "...",
                         symbol_map = {
                             Supermaven = "",

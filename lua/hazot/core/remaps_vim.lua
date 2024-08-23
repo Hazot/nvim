@@ -52,3 +52,6 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 
 -- Set ctrl+backspace to delete words like C-w
 vim.keymap.set("i", "<C-H>", "<C-W>", { noremap = true })
+
+-- Remove highlight search
+vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')

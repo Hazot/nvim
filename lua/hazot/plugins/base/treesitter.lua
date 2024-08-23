@@ -14,6 +14,7 @@ return {
 				"markdown",
 				"markdown_inline",
 				"c",
+                "cpp",
 				"lua",
 				"vim",
 				"vimdoc",

@@ -87,13 +87,15 @@ return {
             },
             extensions = {
                 ["ui-select"] = {
-                    require("telescope.themes").get_ivy(),
+                    require("telescope.themes").get_dropdown(),
                 },
                 ["fzf-native"] = {
                     override_generic_sorter = false,
                     override_file_sorter = true,
                 },
             },
+            require("telescope").load_extension("fzf"),
+            require("telescope").load_extension("ui-select"),
         })
 
         -- Keybinds
