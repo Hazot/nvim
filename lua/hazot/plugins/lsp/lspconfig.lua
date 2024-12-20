@@ -14,7 +14,6 @@ return {
                 "basedpyright",
                 "lua_ls",
                 "jdtls",
-                "typst_lsp",
                 "clangd",
             },
             automatic_installation = true,
