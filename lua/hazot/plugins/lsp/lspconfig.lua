@@ -77,7 +77,6 @@ return {
         -- Language servers
         local servers = {
             "jdtls",
-            "typst_lsp",
             "rust_analyzer",
         }
 
