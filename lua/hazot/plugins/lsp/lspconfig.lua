@@ -27,12 +27,12 @@ return {
         -- lsp_defaults.capabilities =
         --     vim.tbl_deep_extend("force", lsp_defaults.capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-        -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-        -- capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-        -- capabilities.textDocument.foldingRange = {
-        --     dynamicRegistration = false,
-        --     lineFoldingOnly = true,
-        -- }
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+        capabilities.textDocument.foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+        }
 
         -- Keybinds
         function lsp_keymaps(_, bufnr)

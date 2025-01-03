@@ -8,12 +8,12 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
         "--filter=blob:none",
         "--branch=stable",
         lazyrepo,
-        lazypath
+        lazypath,
     })
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out,                            "WarningMsg" },
+            { out, "WarningMsg" },
             { "\nPress any key to exit..." },
         }, true, {})
         vim.fn.getchar()
@@ -26,13 +26,15 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     spec = {
         { import = "hazot.plugins.base" },
-        { import = "hazot.plugins.lsp" }
+        { import = "hazot.plugins.lsp" },
     },
 
     -- colorscheme that will be used when installing plugins.
-    install = { colorscheme = { "onedark" } },
+    install = { colorscheme = { "catpuccin" } },
 
     -- automatically check for plugin updates
     checker = { enabled = true, notify = false },
     change_detection = { enabled = true, notify = false },
 })
+
+vim.cmd([[colorscheme catppuccin-mocha]])

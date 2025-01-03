@@ -4,13 +4,10 @@ return {
     lazy = false,
     priority = 1000, -- Ensure it loads first
     init = function()
-        vim.g.onedark_style = "darker"
+        vim.g.onedark_style = "deep"
         vim.g.onedark_transparent_background = true
         vim.g.onedark_terminal_italics = true
         vim.g.onedark_terminal_bold = true
         vim.g.onedark_hide_end_of_buffer = true
     end,
-    config = function()
-        vim.cmd("colorscheme onedark")
-    end
 }
