@@ -11,3 +11,6 @@ vim.keymap.set("n", "<C-n>", ":Neotree toggle<CR>", {})
 
 -- Undotree
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+
+-- Gitgutter
+vim.keymap.set("n", "<leader>gg", vim.cmd.GitGutterLineHighlightsToggle)
