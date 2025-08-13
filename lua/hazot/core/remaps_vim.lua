@@ -16,7 +16,7 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- Can delete highlight without copying it and then paste the current buffer
 vim.keymap.set("x", "<leader>p", '"_dP')
 
--- Remap ctrl + / to gcc
+-- Remap ctrl + / to gcc commenting
 vim.keymap.set({ "n", "v" }, "<C-_>", "gcc", { desc = "Toggle commenting", remap = true })
 
 -- Yank multiple lines to clipboard easily
@@ -43,7 +43,7 @@ vim.keymap.set(
     "v",
     "<leader>k",
     ":s/\\(\\S.*\\)/ \\1/g<left><left><left><left><left>",
-    { desc = "Fighting one-eyed kirby" }
+    { desc = "Fighting one-eyed kirby or multi-line leading editor" }
 )
 
 -- Have j and k working with word wrap
