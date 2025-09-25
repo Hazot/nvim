@@ -19,7 +19,7 @@ return {
         local cmp = require("cmp")
 
         -- Set color for copilot suggestions
-        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#aa7de8" })
+        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#8a7de8" })
 
         -- Setup nvim-cmp
         cmp.setup({

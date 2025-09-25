@@ -17,6 +17,7 @@ return {
                 -- java = { "google_java_format" }, -- not downloaded properly it seems
                 json = { "prettier" },
                 yaml = { "prettier" },
+                toml = { "pyproject-fmt" },
                 markdown = { "prettier" },
                 html = { "prettier" },
                 css = { "prettier" },
