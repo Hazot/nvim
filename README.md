@@ -5,6 +5,8 @@
 ### Ubuntu
 - `cargo install ripgrep fd-find`
 - `sudo apt install python3-venv -y`
+- `cargo install tree-sitter-cli`
+
 
 After installing everything, to make markdown-preview work, I needed to do
 `:call mkdp#util#install`.
