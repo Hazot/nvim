@@ -49,7 +49,9 @@ return {
         })
 
         -- Install formatters with mason
-        require("mason-conform").setup()
+        require("mason-conform").setup({
+            ignore_install = { "prettier", "isort", "ruff", "black", "pyproject-fmt" },
+        })
 
         -- Create commands to enable/disable autoformat-on-save
         vim.api.nvim_create_user_command("FormatDisable", function(args)

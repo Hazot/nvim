@@ -3,18 +3,23 @@
 ## Requirements
 
 ### Ubuntu
+
 - `cargo install ripgrep fd-find`
 - `sudo apt install python3-venv -y`
 - `cargo install tree-sitter-cli`
-
+- `uv tool install ruff`
+- `npm install -g markdownlint-cli`
+- `sudo apt install chktex`
 
 After installing everything, to make markdown-preview work, I needed to do
-`:call mkdp#util#install`.
+`:call mkdp#util#install()`.
 
 ### MacOS
+
 - `brew install ripgrep fd sioyek`
 
 ### Arch Linux
+
 - `yay -Syu ripgrep`
 - `cargo install fd-find`
 

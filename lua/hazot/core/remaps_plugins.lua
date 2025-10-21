@@ -5,12 +5,10 @@ vim.keymap.set("n", "<leader>cd", [[:Copilot disable<CR>]], { desc = "Copilot di
 -- Supermaven
 vim.keymap.set("n", "<leader>sm", "<cmd>SupermavenToggle<cr>", { desc = "Toggle Supermaven" })
 
--- Neo Tree
-vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {})
-vim.keymap.set("n", "<C-n>", ":Neotree toggle<CR>", {})
-
 -- Undotree
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
 -- Gitgutter
-vim.keymap.set("n", "<leader>gg", vim.cmd.GitGutterLineHighlightsToggle)
+vim.keymap.set("n", "gg", vim.cmd.GitGutterLineHighlightsToggle, { desc = "Toggle GitGutter highlights" })
+vim.keymap.set("n", "]h", "<Plug>(GitGutterNextHunk)", { desc = "Next Git hunk" })
+vim.keymap.set("n", "[h", "<Plug>(GitGutterPrevHunk)", { desc = "Prev Git hunk" })

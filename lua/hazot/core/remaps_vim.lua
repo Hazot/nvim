@@ -13,7 +13,7 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
--- Can delete highlight without copying it and then paste the current buffer
+-- Can delete highglight without copying it and then paste the current buffer
 vim.keymap.set("x", "<leader>p", '"_dP')
 
 -- Remap ctrl + / to gcc commenting

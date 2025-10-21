@@ -90,7 +90,7 @@ return {
                     require("telescope.themes").get_dropdown(),
                 },
                 ["fzf-native"] = {
-                    override_generic_sorter = false,
+                    override_generic_sorter = true,
                     override_file_sorter = true,
                 },
             },

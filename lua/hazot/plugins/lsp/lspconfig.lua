@@ -8,21 +8,6 @@ return {
     config = function()
         require("hazot.plugins.lsp.mason")
 
-        -- mason-lspconfig: turn off auto-enable (needs nvim 0.11)
-        require("mason-lspconfig").setup({
-            ensure_installed = {
-                "rust_analyzer",
-                "basedpyright",
-                "lua_ls",
-                "jdtls",
-                "clangd",
-                "ruff",
-            },
-            automatic_installation = true,
-            automatic_enable = false, -- <-- add this line
-        })
-
-        local lspconfig = require("lspconfig")
         local util = require("lspconfig.util")
         local uv = vim.uv or vim.loop
 
@@ -38,11 +23,10 @@ return {
 
         -- utility to find venv
         local function find_venv(root)
-            -- priority: explicit env, .venv (uv default), pixi’s default env
             local cand = {
                 vim.env.VIRTUAL_ENV,
-                root and (root .. "/.venv") or nil, -- uv venv
-                root and (root .. "/.pixi/envs/default") or nil, -- pixi default
+                root and (root .. "/.venv") or nil,
+                root and (root .. "/.pixi/envs/default") or nil,
             }
             for _, p in ipairs(cand) do
                 if p and vim.fn.isdirectory(p) == 1 then
@@ -84,26 +68,16 @@ return {
             lsp_keymaps(client, bufnr)
         end
 
-        for _, lsp in ipairs({ "jdtls", "rust_analyzer" }) do
-            lspconfig[lsp].setup({
-                capabilities = capabilities,
-                on_attach = on_attach,
-                flags = { debounce_text_changes = 150 },
-            })
-        end
-
+        -- Use vim.lsp.config() for Neovim 0.11+
         -- basedpyright
-        lspconfig.basedpyright.setup({
-            -- If you installed via Mason, you can omit `cmd` and let lspconfig resolve it.
-            -- cmd = { "basedpyright-langserver", "--stdio" },
+        vim.lsp.config("basedpyright", {
             filetypes = { "python" },
-            root_dir = project_root,
-            -- Tell the server where the venv lives
+            root_markers = { "pyproject.toml", "ruff.toml", "pyrightconfig.json", ".git" },
             on_new_config = function(new_config, root)
                 local py, venv = venv_python(root)
                 new_config.settings = vim.tbl_deep_extend("force", new_config.settings or {}, {
                     python = {
-                        pythonPath = py, -- interpreter for stub resolution
+                        pythonPath = py,
                         venvPath = venv and vim.fn.fnamemodify(venv, ":h") or nil,
                         venv = venv and vim.fn.fnamemodify(venv, ":t") or nil,
                         analysis = { autoImportCompletions = true },
@@ -130,41 +104,67 @@ return {
             on_attach = on_attach,
         })
 
-        -- Ruff (reads pyproject.toml / ruff.toml from root)
-        lspconfig.ruff.setup({
-            root_dir = project_root,
+        -- Ruff
+        vim.lsp.config("ruff", {
+            root_markers = { "pyproject.toml", "ruff.toml", ".git" },
             on_new_config = function(new_config, root)
                 local _, venv = venv_python(root)
-                if venv and vim.fn.executable(venv .. "/bin/ruff") == 1 then
-                    new_config.cmd = { venv .. "/bin/ruff", "server" } -- ruff’s LSP mode
+                if venv and vim.fn.executable(venv .. "$HOME/.local/bin/ruff") == 1 then
+                    new_config.cmd = { venv .. "$HOME/.local/bin/ruff", "server" }
                 end
             end,
             settings = {
-                -- to avoid "No configuration file found" warnings
-                -- (ruff will still read pyproject.toml / ruff.toml from root)
                 ruff = { args = { "--config", "/dev/null" } },
             },
             capabilities = capabilities,
             on_attach = function(client, bufnr)
-                client.server_capabilities.hoverProvider = false -- let Pyright/BasedPyright do hovers
+                on_attach(client, bufnr)
+                client.server_capabilities.hoverProvider = false
             end,
         })
 
         -- lua_ls
-        lspconfig.lua_ls.setup({
-            settings = { Lua = { diagnostics = { globals = { "vim", "group" } }, telemetry = { enable = false } } },
+        vim.lsp.config("lua_ls", {
+            settings = {
+                Lua = {
+                    diagnostics = { globals = { "vim", "group" } },
+                    telemetry = { enable = false },
+                },
+            },
             capabilities = capabilities,
             on_attach = on_attach,
         })
 
         -- clangd
-        lspconfig.clangd.setup({
+        vim.lsp.config("clangd", {
             cmd = { "clangd", "--fallback-style=Google", "--offset-encoding=utf-16" },
             capabilities = capabilities,
             on_attach = on_attach,
         })
 
-        local signs = { Error = " ", Warn = " ", Hint = "󰌵 ", Info = " " }
+        -- jdtls
+        vim.lsp.config("jdtls", {
+            capabilities = capabilities,
+            on_attach = on_attach,
+            flags = { debounce_text_changes = 150 },
+        })
+
+        -- rust_analyzer
+        vim.lsp.config("rust_analyzer", {
+            capabilities = capabilities,
+            on_attach = on_attach,
+            flags = { debounce_text_changes = 150 },
+        })
+
+        -- Enable the servers
+        vim.lsp.enable("basedpyright")
+        vim.lsp.enable("ruff")
+        vim.lsp.enable("lua_ls")
+        vim.lsp.enable("clangd")
+        vim.lsp.enable("jdtls")
+        vim.lsp.enable("rust_analyzer")
+
+        local signs = { Error = " ", Warn = " ", Hint = "󰌵 ", Info = " " }
         for type, icon in pairs(signs) do
             vim.fn.sign_define("DiagnosticSign" .. type, { text = icon, texthl = "DiagnosticSign" .. type, numhl = "" })
         end
