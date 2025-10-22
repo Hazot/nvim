@@ -9,6 +9,6 @@ vim.keymap.set("n", "<leader>sm", "<cmd>SupermavenToggle<cr>", { desc = "Toggle 
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
 -- Gitgutter
-vim.keymap.set("n", "gg", vim.cmd.GitGutterLineHighlightsToggle, { desc = "Toggle GitGutter highlights" })
+vim.keymap.set("n", "gh", vim.cmd.GitGutterLineHighlightsToggle, { desc = "Toggle GitGutter highlights" })
 vim.keymap.set("n", "]h", "<Plug>(GitGutterNextHunk)", { desc = "Next Git hunk" })
 vim.keymap.set("n", "[h", "<Plug>(GitGutterPrevHunk)", { desc = "Prev Git hunk" })
