@@ -142,13 +142,6 @@ return {
             on_attach = on_attach,
         })
 
-        -- jdtls
-        vim.lsp.config("jdtls", {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            flags = { debounce_text_changes = 150 },
-        })
-
         -- rust_analyzer
         vim.lsp.config("rust_analyzer", {
             capabilities = capabilities,
@@ -161,7 +154,6 @@ return {
         vim.lsp.enable("ruff")
         vim.lsp.enable("lua_ls")
         vim.lsp.enable("clangd")
-        vim.lsp.enable("jdtls")
         vim.lsp.enable("rust_analyzer")
 
         local signs = { Error = " ", Warn = " ", Hint = "󰌵 ", Info = " " }

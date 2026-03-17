@@ -17,6 +17,14 @@ After installing everything, to make markdown-preview work, I needed to do
 ### MacOS
 
 - `brew install ripgrep fd sioyek`
+- `brew install llvm shfmt stylua`
+- `rustup component add clippy`
+- `npm install -g eslint prettier markdownlint-cli`
+- `uv tool install ruff && uv tool install isort && uv tool install pyproject-fmt`
+- `ln -sf /opt/homebrew/opt/llvm/bin/clang-tidy /opt/homebrew/bin/clang-tidy`
+- `ln -sf "$HOME/.cargo/bin/cargo-clippy" "$HOME/.cargo/bin/clippy"`
+- `brew install --cask basictex`
+- `sudo /Library/TeX/texbin/tlmgr install chktex`
 
 ### Arch Linux
 
@@ -30,6 +38,9 @@ From `$HOME`, do:
 ```bash
 git clone https://github.com/neovim/neovim.git
 cd neovim
-make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/neovim"
+make distclean
+make CMAKE_EXTRA_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/neovim"
 make install
 ```
+
+Then add `export PATH="$HOME/neovim/bin:$PATH"` to your shell config.

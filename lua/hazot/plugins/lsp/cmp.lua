@@ -8,7 +8,37 @@ return {
         "hrsh7th/cmp-nvim-lua", -- Source for completion of Neovim's Lua API
         "hrsh7th/cmp-nvim-lsp-signature-help", -- Source for function signature
         "hrsh7th/cmp-emoji", -- Source for emojis
-        { "zbirenbaum/copilot-cmp", dependencies = "zbirenbaum/copilot.lua", config = true }, -- Source for copilot
+        {
+            "zbirenbaum/copilot-cmp",
+            dependencies = "zbirenbaum/copilot.lua",
+            config = function(_, opts)
+                local source = require("copilot_cmp.source")
+
+                source.is_available = function(self)
+                    if self.client:is_stopped() or self.client.name ~= "copilot" then
+                        return false
+                    end
+
+                    local get_source_client = function()
+                        if vim.lsp.get_clients == nil then
+                            return vim.lsp.get_active_clients({
+                                bufnr = vim.api.nvim_get_current_buf(),
+                                id = self.client.id,
+                            })
+                        end
+
+                        return vim.lsp.get_clients({
+                            bufnr = vim.api.nvim_get_current_buf(),
+                            id = self.client.id,
+                        })
+                    end
+
+                    return next(get_source_client()) ~= nil
+                end
+
+                require("copilot_cmp").setup(opts)
+            end,
+        }, -- Source for copilot
         { "saadparwaiz1/cmp_luasnip", dependencies = "L3MON4D3/LuaSnip" }, -- Source for completion of LuaSnip snippets
         "onsails/lspkind.nvim", -- Pictograms in completion menu
         "brenoprata10/nvim-highlight-colors", -- Highlight colors in completion menu

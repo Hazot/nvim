@@ -1,13 +1,16 @@
 return {
     "stevearc/conform.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "zapling/mason-conform.nvim", dependencies = "williamboman/mason.nvim" },
     cmd = { "ConformInfo" },
     config = function()
         local conform = require("conform")
+        local function format_buffer()
+            conform.format({ lsp_fallback = true, async = true, timeout_ms = 2000 })
+        end
+
         conform.setup({
             formatters_by_ft = {
-                python = { "isort", "black" },
+                python = { "isort", "ruff_format" },
                 lua = { "stylua" },
                 sh = { "shfmt" },
                 bash = { "shfmt" },
@@ -48,11 +51,6 @@ return {
             },
         })
 
-        -- Install formatters with mason
-        require("mason-conform").setup({
-            ignore_install = { "prettier", "isort", "ruff", "black", "pyproject-fmt" },
-        })
-
         -- Create commands to enable/disable autoformat-on-save
         vim.api.nvim_create_user_command("FormatDisable", function(args)
             if args.bang then
@@ -74,19 +72,29 @@ return {
 
         -- Keymaps for format (<leader>f is slow since telescope uses <leader>fh and <leader>fb
         vim.keymap.set({ "n", "v" }, "<leader>ff", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
 
         vim.keymap.set({ "n", "v" }, "<leader>fd", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
 
         vim.keymap.set({ "n", "v" }, "<A-F>", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
 
+        vim.keymap.set({ "n", "v" }, "<S-A-f>", function()
+            format_buffer()
+        end, { desc = "Format buffer" })
+
+        if vim.g.neovide or vim.g.vscode then
+            vim.keymap.set({ "n", "v" }, "<D-F>", function()
+                format_buffer()
+            end, { desc = "Format buffer" })
+        end
+
         vim.keymap.set({ "n", "v" }, "<C-I>", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
     end,
 }

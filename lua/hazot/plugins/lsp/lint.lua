@@ -1,7 +1,6 @@
 return {
     "mfussenegger/nvim-lint",
     event = { "BufReadPost", "BufNewFile" }, -- BufReadPost avoids running on dirs opened via netrw
-    dependencies = { "rshkarin/mason-nvim-lint", dependencies = "williamboman/mason.nvim" },
     config = function()
         local lint = require("lint")
 
@@ -11,15 +10,11 @@ return {
             cpp = { "clangtidy" }, -- static analysis for C++
             rust = { "clippy" }, -- Rust’s official linter
             python = { "ruff" }, -- fast Python linter (your choice)
-            java = { "checkstyle" }, -- style & static analysis for Java
             javascript = { "eslint" }, -- JS linter
             typescript = { "eslint" }, -- TS linter (via eslint + typescript plugin)
             markdown = { "markdownlint" }, -- <- make sure vale won't run
             tex = { "chktex" }, -- <- make sure vale won't run
         }
-
-        -- Install linters with mason
-        require("mason-nvim-lint").setup()
 
         -- Guarded lint trigger
         local aug = vim.api.nvim_create_augroup("plugin-lint", { clear = true })
