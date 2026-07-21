@@ -6,7 +6,13 @@ return {
         { "williamboman/mason-lspconfig.nvim", dependencies = "williamboman/mason.nvim" },
     },
     config = function()
-        require("hazot.plugins.lsp.mason")
+        -- Ensure the language servers are installed by Mason. We enable them
+        -- manually below with vim.lsp.enable(), so disable automatic enabling
+        -- to avoid double-configuring.
+        require("mason-lspconfig").setup({
+            ensure_installed = { "lua_ls", "basedpyright", "clangd" },
+            automatic_enable = false,
+        })
 
         local util = require("lspconfig.util")
         local uv = vim.uv or vim.loop

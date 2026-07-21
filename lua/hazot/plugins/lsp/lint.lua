@@ -18,8 +18,16 @@ return {
             tex = { "chktex" }, -- <- make sure vale won't run
         }
 
-        -- Install linters with mason
-        require("mason-nvim-lint").setup()
+        -- Auto-install the mason-distributed linters (ruff, checkstyle, markdownlint).
+        -- The rest aren't Mason packages, so tell mason-nvim-lint to skip them
+        -- (they still run via nvim-lint when found on $PATH):
+        --   eslint    -> project-local npm dependency
+        --   clippy    -> Rust toolchain (`rustup component add clippy`)
+        --   clangtidy -> system clang-tools / distro package
+        --   chktex    -> TeXLive
+        require("mason-nvim-lint").setup({
+            ignore_install = { "eslint", "clippy", "clangtidy", "chktex" },
+        })
 
         -- Guarded lint trigger
         local aug = vim.api.nvim_create_augroup("plugin-lint", { clear = true })

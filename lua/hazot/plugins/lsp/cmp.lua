@@ -8,7 +8,6 @@ return {
         "hrsh7th/cmp-nvim-lua", -- Source for completion of Neovim's Lua API
         "hrsh7th/cmp-nvim-lsp-signature-help", -- Source for function signature
         "hrsh7th/cmp-emoji", -- Source for emojis
-        { "zbirenbaum/copilot-cmp", dependencies = "zbirenbaum/copilot.lua", config = true }, -- Source for copilot
         { "saadparwaiz1/cmp_luasnip", dependencies = "L3MON4D3/LuaSnip" }, -- Source for completion of LuaSnip snippets
         "onsails/lspkind.nvim", -- Pictograms in completion menu
         "brenoprata10/nvim-highlight-colors", -- Highlight colors in completion menu
@@ -17,9 +16,6 @@ return {
         local luasnip = require("luasnip")
 
         local cmp = require("cmp")
-
-        -- Set color for copilot suggestions
-        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#8a7de8" })
 
         -- Setup nvim-cmp
         cmp.setup({
@@ -35,8 +31,7 @@ return {
             },
 
             sources = cmp.config.sources({
-                -- { name = "supermaven" }, -- Supermaven works great outside also
-                { name = "copilot" },
+                -- Copilot is provided as inline ghost text by copilot.lua, not as a cmp source.
                 {
                     name = "nvim_lsp",
                     entry_filter = function(entry, _)
@@ -67,8 +62,6 @@ return {
                         maxwidth = 60,
                         ellipsis_char = "...",
                         symbol_map = {
-                            Supermaven = "",
-                            Copilot = "",
                             Text = "󰉿",
                             Method = "󰆧",
                             Function = "󰊕",
