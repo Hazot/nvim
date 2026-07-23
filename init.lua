@@ -9,7 +9,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
         vim.notify = function(msg, level, opts)
             -- Suppress copilot-cmp and lspsaga deprecation warnings
             if type(msg) == "string" then
-                if msg:match("client%.is_stopped") or msg:match("client%.supports_method") then
+                if msg:match("client%.supports_method") then
                     return
                 end
             end

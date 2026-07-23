@@ -1,13 +1,33 @@
 return {
     "stevearc/conform.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "zapling/mason-conform.nvim", dependencies = "williamboman/mason.nvim" },
     cmd = { "ConformInfo" },
     config = function()
         local conform = require("conform")
+
+        -- Prefer ruff from $PATH, then uv's ~/.local/bin/ruff.
+        local function ruff_cmd()
+            local from_path = vim.fn.exepath("ruff")
+            if from_path ~= "" then
+                return from_path
+            end
+
+            local home = vim.env.HOME
+            local uv_ruff = home and (home .. "/.local/bin/ruff") or nil
+            if uv_ruff and vim.fn.executable(uv_ruff) == 1 then
+                return uv_ruff
+            end
+
+            return "ruff"
+        end
+
+        local function format_buffer()
+            conform.format({ lsp_fallback = true, async = true, timeout_ms = 2000 })
+        end
+
         conform.setup({
             formatters_by_ft = {
-                python = { "isort", "black" },
+                python = { "isort", "ruff_format" },
                 lua = { "stylua" },
                 sh = { "shfmt" },
                 bash = { "shfmt" },
@@ -15,14 +35,22 @@ return {
                 c = { "clang_format" },
                 cpp = { "clang_format" },
                 -- java = { "google_java_format" }, -- not downloaded properly it seems
-                json = { "prettier" },
-                yaml = { "prettier" },
                 toml = { "pyproject-fmt" },
-                markdown = { "prettier" },
-                html = { "prettier" },
-                css = { "prettier" },
-                javascript = { "prettier" },
-                typescript = { "prettier" },
+                markdown = { "mdformat" },
+                -- oxfmt (oxc/VoidZero): Prettier-compatible, ~30x faster.
+                -- Zero-config; drop a .oxfmtrc.json per-project to override.
+                -- Install: brew install oxfmt (not cargo-installable).
+                json = { "oxfmt" },
+                jsonc = { "oxfmt" },
+                yaml = { "oxfmt" },
+                html = { "oxfmt" },
+                css = { "oxfmt" },
+                scss = { "oxfmt" },
+                less = { "oxfmt" },
+                javascript = { "oxfmt" },
+                javascriptreact = { "oxfmt" },
+                typescript = { "oxfmt" },
+                typescriptreact = { "oxfmt" },
             },
             format_on_save = function(bufnr)
                 -- Disable autoformat-on-save by default
@@ -45,12 +73,10 @@ return {
                 clang_format = {
                     prepend_args = { "--style={BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 120}" },
                 },
+                ruff_format = {
+                    command = ruff_cmd(),
+                },
             },
-        })
-
-        -- Install formatters with mason
-        require("mason-conform").setup({
-            ignore_install = { "prettier", "isort", "ruff", "black", "pyproject-fmt" },
         })
 
         -- Create commands to enable/disable autoformat-on-save
@@ -74,19 +100,29 @@ return {
 
         -- Keymaps for format (<leader>f is slow since telescope uses <leader>fh and <leader>fb
         vim.keymap.set({ "n", "v" }, "<leader>ff", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
 
         vim.keymap.set({ "n", "v" }, "<leader>fd", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
 
         vim.keymap.set({ "n", "v" }, "<A-F>", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
 
+        vim.keymap.set({ "n", "v" }, "<S-A-f>", function()
+            format_buffer()
+        end, { desc = "Format buffer" })
+
+        if vim.g.neovide or vim.g.vscode then
+            vim.keymap.set({ "n", "v" }, "<D-F>", function()
+                format_buffer()
+            end, { desc = "Format buffer" })
+        end
+
         vim.keymap.set({ "n", "v" }, "<C-I>", function()
-            conform.format({ lsp_fallback = true, async = true })
+            format_buffer()
         end, { desc = "Format buffer" })
     end,
 }

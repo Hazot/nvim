@@ -3,6 +3,18 @@ return {
     cmd = "Copilot",
     event = { "BufReadPre", "BufNewFile" },
     opts = {
+        should_attach = function(bufnr, bufname)
+            local bt = vim.bo[bufnr].buftype
+            if bt ~= "" then
+                return false
+            end
+
+            if bufname ~= nil and bufname ~= "" then
+                return true
+            end
+
+            return vim.bo[bufnr].buflisted
+        end,
         panel = {
             enabled = false,
             auto_refresh = true,

@@ -1,9 +1,23 @@
 return {
     "mfussenegger/nvim-lint",
     event = { "BufReadPost", "BufNewFile" }, -- BufReadPost avoids running on dirs opened via netrw
-    dependencies = { "rshkarin/mason-nvim-lint", dependencies = "williamboman/mason.nvim" },
     config = function()
         local lint = require("lint")
+
+        local function ruff_cmd()
+            local from_path = vim.fn.exepath("ruff")
+            if from_path ~= "" then
+                return from_path
+            end
+
+            local home = vim.env.HOME
+            local uv_ruff = home and (home .. "/.local/bin/ruff") or nil
+            if uv_ruff and vim.fn.executable(uv_ruff) == 1 then
+                return uv_ruff
+            end
+
+            return "ruff"
+        end
 
         -- Explicitly set only the linters you want, and disable for md/tex to prevent accidental 'vale'
         lint.linters_by_ft = {
@@ -11,23 +25,27 @@ return {
             cpp = { "clangtidy" }, -- static analysis for C++
             rust = { "clippy" }, -- Rust’s official linter
             python = { "ruff" }, -- fast Python linter (your choice)
-            java = { "checkstyle" }, -- style & static analysis for Java
             javascript = { "eslint" }, -- JS linter
             typescript = { "eslint" }, -- TS linter (via eslint + typescript plugin)
             markdown = { "markdownlint" }, -- <- make sure vale won't run
             tex = { "chktex" }, -- <- make sure vale won't run
         }
 
-        -- Auto-install the mason-distributed linters (ruff, checkstyle, markdownlint).
-        -- The rest aren't Mason packages, so tell mason-nvim-lint to skip them
-        -- (they still run via nvim-lint when found on $PATH):
-        --   eslint    -> project-local npm dependency
-        --   clippy    -> Rust toolchain (`rustup component add clippy`)
-        --   clangtidy -> system clang-tools / distro package
-        --   chktex    -> TeXLive
-        require("mason-nvim-lint").setup({
-            ignore_install = { "eslint", "clippy", "clangtidy", "chktex" },
-        })
+        -- Linters run off $PATH: ruff, markdownlint (Homebrew/npm/pip), plus
+        -- eslint (npm), clippy (rustup), clangtidy (clang-tools), chktex (TeXLive).
+        -- mason is optional: if mason-nvim-lint happens to be installed, use it to
+        -- best-effort auto-install the mason-distributed linters; otherwise skip
+        -- silently. Never let a missing/broken mason crash linting.
+        pcall(function()
+            require("mason-nvim-lint").setup({
+                ignore_install = { "eslint", "clippy", "clangtidy", "chktex" },
+            })
+        end)
+
+        -- Prefer ruff from venv/uv over whatever mason may have installed.
+        if lint.linters.ruff then
+            lint.linters.ruff.cmd = ruff_cmd()
+        end
 
         -- Guarded lint trigger
         local aug = vim.api.nvim_create_augroup("plugin-lint", { clear = true })
@@ -62,9 +80,5 @@ return {
                 lint.try_lint()
             end,
         })
-
-        vim.keymap.set("n", "<leader>l", function()
-            require("lint").try_lint()
-        end, { desc = "Lint buffer" })
     end,
 }
