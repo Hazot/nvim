@@ -4,6 +4,23 @@ return {
     cmd = { "ConformInfo" },
     config = function()
         local conform = require("conform")
+
+        -- Prefer ruff from $PATH, then uv's ~/.local/bin/ruff.
+        local function ruff_cmd()
+            local from_path = vim.fn.exepath("ruff")
+            if from_path ~= "" then
+                return from_path
+            end
+
+            local home = vim.env.HOME
+            local uv_ruff = home and (home .. "/.local/bin/ruff") or nil
+            if uv_ruff and vim.fn.executable(uv_ruff) == 1 then
+                return uv_ruff
+            end
+
+            return "ruff"
+        end
+
         local function format_buffer()
             conform.format({ lsp_fallback = true, async = true, timeout_ms = 2000 })
         end
@@ -18,14 +35,22 @@ return {
                 c = { "clang_format" },
                 cpp = { "clang_format" },
                 -- java = { "google_java_format" }, -- not downloaded properly it seems
-                json = { "prettier" },
-                yaml = { "prettier" },
                 toml = { "pyproject-fmt" },
-                markdown = { "prettier" },
-                html = { "prettier" },
-                css = { "prettier" },
-                javascript = { "prettier" },
-                typescript = { "prettier" },
+                markdown = { "mdformat" },
+                -- oxfmt (oxc/VoidZero): Prettier-compatible, ~30x faster.
+                -- Zero-config; drop a .oxfmtrc.json per-project to override.
+                -- Install: brew install oxfmt (not cargo-installable).
+                json = { "oxfmt" },
+                jsonc = { "oxfmt" },
+                yaml = { "oxfmt" },
+                html = { "oxfmt" },
+                css = { "oxfmt" },
+                scss = { "oxfmt" },
+                less = { "oxfmt" },
+                javascript = { "oxfmt" },
+                javascriptreact = { "oxfmt" },
+                typescript = { "oxfmt" },
+                typescriptreact = { "oxfmt" },
             },
             format_on_save = function(bufnr)
                 -- Disable autoformat-on-save by default
@@ -47,6 +72,9 @@ return {
                 },
                 clang_format = {
                     prepend_args = { "--style={BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 120}" },
+                },
+                ruff_format = {
+                    command = ruff_cmd(),
                 },
             },
         })

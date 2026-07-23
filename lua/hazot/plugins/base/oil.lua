@@ -9,12 +9,6 @@ return {
                     ["<leader>o"] = false,
                 },
             })
-
-            -- Open parent directory in current window
-            vim.keymap.set("n", "<leader>o", "<cmd>Oil<CR>")
-
-            -- Open parent directory in floating window
-            vim.keymap.set("n", "<leader>-", require("oil").toggle_float)
         end,
     },
 }

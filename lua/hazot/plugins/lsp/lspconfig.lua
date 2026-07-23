@@ -57,6 +57,22 @@ return {
             return "python3", nil
         end
 
+        -- Prefer Ruff from venv, then uv tool path, then PATH.
+        local function ruff_bin(root)
+            local _, venv = venv_python(root)
+            if venv and vim.fn.executable(venv .. "/bin/ruff") == 1 then
+                return venv .. "/bin/ruff"
+            end
+
+            local home = vim.env.HOME
+            local uv_ruff = home and (home .. "/.local/bin/ruff") or nil
+            if uv_ruff and vim.fn.executable(uv_ruff) == 1 then
+                return uv_ruff
+            end
+
+            return "ruff"
+        end
+
         local function lsp_keymaps(_, bufnr)
             local map = function(keys, func, desc)
                 vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
@@ -107,15 +123,11 @@ return {
         vim.lsp.config("ruff", {
             root_markers = { "pyproject.toml", "ruff.toml", ".git" },
             on_new_config = function(new_config, root)
-                -- Prefer a project-local ruff inside the venv; otherwise fall back
-                -- to ruff on $PATH (nvim-lspconfig's default cmd).
-                local _, venv = venv_python(root)
-                if venv and vim.fn.executable(venv .. "/bin/ruff") == 1 then
-                    new_config.cmd = { venv .. "/bin/ruff", "server" }
-                end
+                -- Prefer venv ruff, then uv's ~/.local/bin/ruff, then $PATH.
+                new_config.cmd = { ruff_bin(root), "server" }
             end,
             settings = {
-                ruff = { args = { "--config", "/dev/null" } },
+                ruff = {},
             },
             capabilities = capabilities,
             on_attach = function(client, bufnr)

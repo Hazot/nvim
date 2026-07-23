@@ -4,6 +4,21 @@ return {
     config = function()
         local lint = require("lint")
 
+        local function ruff_cmd()
+            local from_path = vim.fn.exepath("ruff")
+            if from_path ~= "" then
+                return from_path
+            end
+
+            local home = vim.env.HOME
+            local uv_ruff = home and (home .. "/.local/bin/ruff") or nil
+            if uv_ruff and vim.fn.executable(uv_ruff) == 1 then
+                return uv_ruff
+            end
+
+            return "ruff"
+        end
+
         -- Explicitly set only the linters you want, and disable for md/tex to prevent accidental 'vale'
         lint.linters_by_ft = {
             c = { "clangtidy" }, -- static analysis for C
@@ -26,6 +41,11 @@ return {
                 ignore_install = { "eslint", "clippy", "clangtidy", "chktex" },
             })
         end)
+
+        -- Prefer ruff from venv/uv over whatever mason may have installed.
+        if lint.linters.ruff then
+            lint.linters.ruff.cmd = ruff_cmd()
+        end
 
         -- Guarded lint trigger
         local aug = vim.api.nvim_create_augroup("plugin-lint", { clear = true })
@@ -60,9 +80,5 @@ return {
                 lint.try_lint()
             end,
         })
-
-        vim.keymap.set("n", "<leader>l", function()
-            require("lint").try_lint()
-        end, { desc = "Lint buffer" })
     end,
 }
