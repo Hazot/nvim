@@ -1,51 +1,53 @@
 return {
     "nvim-treesitter/nvim-treesitter",
-    -- to make sure that the parser runs before a file is opened
-    events = { "BufRead", "BufNewFile" },
+    -- The `main` branch is the rewrite that targets current/nightly Neovim
+    -- (0.11+). It uses Neovim's built-in treesitter for highlight/fold and
+    -- provides parser install + experimental indent.
+    branch = "main",
     build = ":TSUpdate",
+    -- Load before a file is displayed so the FileType autocmd below can start
+    -- highlighting on the very first buffer.
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
-        require("nvim-treesitter.configs").setup({
-            -- A list of parser names, or "all" (the five listed parsers should always be installed)
-            ensure_installed = {
-                "bash",
-                "python",
-                "julia",
-                "javascript",
-                "markdown",
-                "markdown_inline",
-                "c",
-                "cpp",
-                "lua",
-                "vim",
-                "vimdoc",
-                "query",
-                "comment",
-                "toml",
-                "json",
-                "yaml",
-            },
+        -- Parsers to keep installed. install() is async and only fetches the
+        -- ones that are missing, so it's cheap to call on every startup.
+        local ensure = {
+            "bash",
+            "python",
+            "javascript",
+            "markdown",
+            "markdown_inline",
+            "c",
+            "cpp",
+            "lua",
+            "vim",
+            "vimdoc",
+            "query",
+            "comment",
+            "toml",
+            "json",
+            "yaml",
+        }
+        require("nvim-treesitter").install(ensure)
 
-            -- Install parsers synchronously (only applied to `ensure_installed`)
-            sync_install = false,
-
-            -- Automatically install missing parsers when entering buffer
-            -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-            auto_install = true,
-
-            highlight = {
-                -- `false` will disable the whole extension
-                enable = true,
-
-                -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-                -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-                -- Using this option may slow down your editor, and you may see some duplicate highlights.
-                -- Instead of true it can also be a list of languages
-                additional_vim_regex_highlighting = false,
-            },
-
-            indent = {
-                enable = true,
-            },
+        -- Enable treesitter features per buffer. On `main`, highlighting is a
+        -- core Neovim feature (vim.treesitter.start) and is not auto-enabled.
+        local group = vim.api.nvim_create_augroup("hazot-treesitter", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+            group = group,
+            callback = function(args)
+                local buf = args.buf
+                local ft = args.match
+                local lang = vim.treesitter.language.get_lang(ft)
+                if not lang then
+                    return
+                end
+                -- Highlighting (no-op/erroring safely if the parser isn't installed yet)
+                if pcall(vim.treesitter.start, buf, lang) then
+                    -- Experimental treesitter indentation
+                    vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                end
+            end,
         })
     end,
 }

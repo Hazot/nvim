@@ -16,6 +16,17 @@ return {
             tex = { "chktex" }, -- <- make sure vale won't run
         }
 
+        -- Linters run off $PATH: ruff, markdownlint (Homebrew/npm/pip), plus
+        -- eslint (npm), clippy (rustup), clangtidy (clang-tools), chktex (TeXLive).
+        -- mason is optional: if mason-nvim-lint happens to be installed, use it to
+        -- best-effort auto-install the mason-distributed linters; otherwise skip
+        -- silently. Never let a missing/broken mason crash linting.
+        pcall(function()
+            require("mason-nvim-lint").setup({
+                ignore_install = { "eslint", "clippy", "clangtidy", "chktex" },
+            })
+        end)
+
         -- Guarded lint trigger
         local aug = vim.api.nvim_create_augroup("plugin-lint", { clear = true })
         vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave", "TextChanged" }, {

@@ -6,7 +6,19 @@ return {
         { "williamboman/mason-lspconfig.nvim", dependencies = "williamboman/mason.nvim" },
     },
     config = function()
-        require("hazot.plugins.lsp.mason")
+        -- Language servers are resolved from $PATH (Homebrew / uv / cargo / apt,
+        -- or a mason shim when mason is present). mason is OPTIONAL: if
+        -- mason-lspconfig is available we wire it up, but we do NOT auto-install
+        -- anything (ensure_installed = {}). That keeps startup quiet and behaves
+        -- identically across machines with or without a working mason (notably
+        -- macOS, where mason's Python venv installer fails on standalone pythons).
+        -- Servers are enabled manually below via vim.lsp.enable().
+        pcall(function()
+            require("mason-lspconfig").setup({
+                ensure_installed = {},
+                automatic_enable = false,
+            })
+        end)
 
         local util = require("lspconfig.util")
         local uv = vim.uv or vim.loop
@@ -69,35 +81,22 @@ return {
         end
 
         -- Use vim.lsp.config() for Neovim 0.11+
-        -- basedpyright
-        vim.lsp.config("basedpyright", {
-            filetypes = { "python" },
-            root_markers = { "pyproject.toml", "ruff.toml", "pyrightconfig.json", ".git" },
-            on_new_config = function(new_config, root)
-                local py, venv = venv_python(root)
-                new_config.settings = vim.tbl_deep_extend("force", new_config.settings or {}, {
-                    python = {
-                        pythonPath = py,
-                        venvPath = venv and vim.fn.fnamemodify(venv, ":h") or nil,
-                        venv = venv and vim.fn.fnamemodify(venv, ":t") or nil,
-                        analysis = { autoImportCompletions = true },
-                    },
-                })
-            end,
+        -- ty (Astral's fast Python type checker + language server) replaces
+        -- basedpyright. cmd/filetypes/root_markers come from nvim-lspconfig's
+        -- shipped lsp/ty.lua. ty auto-discovers the project environment
+        -- (.venv / VIRTUAL_ENV / pyproject.toml), so no interpreter-path
+        -- plumbing is needed here. Type checking = ty, lint/format = ruff.
+        vim.lsp.config("ty", {
             settings = {
-                basedpyright = {
-                    disableOrganizeImports = true,
-                    typeCheckingMode = "standard",
-                    analysis = {
-                        inlayHints = {
-                            callArgumentNames = "all",
-                            functionReturnTypes = true,
-                            pytestParameters = true,
-                            variableTypes = true,
-                        },
-                        autoFormatStrings = true,
+                ty = {
+                    diagnosticMode = "openFilesOnly",
+                    inlayHints = {
+                        variableTypes = true,
+                        callArgumentNames = true,
                     },
-                    linting = { enabled = true },
+                    completions = {
+                        autoImport = true,
+                    },
                 },
             },
             capabilities = capabilities,
@@ -108,9 +107,11 @@ return {
         vim.lsp.config("ruff", {
             root_markers = { "pyproject.toml", "ruff.toml", ".git" },
             on_new_config = function(new_config, root)
+                -- Prefer a project-local ruff inside the venv; otherwise fall back
+                -- to ruff on $PATH (nvim-lspconfig's default cmd).
                 local _, venv = venv_python(root)
-                if venv and vim.fn.executable(venv .. "$HOME/.local/bin/ruff") == 1 then
-                    new_config.cmd = { venv .. "$HOME/.local/bin/ruff", "server" }
+                if venv and vim.fn.executable(venv .. "/bin/ruff") == 1 then
+                    new_config.cmd = { venv .. "/bin/ruff", "server" }
                 end
             end,
             settings = {
@@ -150,7 +151,7 @@ return {
         })
 
         -- Enable the servers
-        vim.lsp.enable("basedpyright")
+        vim.lsp.enable("ty")
         vim.lsp.enable("ruff")
         vim.lsp.enable("lua_ls")
         vim.lsp.enable("clangd")

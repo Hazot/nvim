@@ -35,4 +35,7 @@ require("lazy").setup({
     -- automatically check for plugin updates
     checker = { enabled = true, notify = false },
     change_detection = { enabled = true, notify = false },
+
+    -- No plugin here needs luarocks; disable hererocks to avoid the install error.
+    rocks = { hererocks = false, enabled = false },
 })

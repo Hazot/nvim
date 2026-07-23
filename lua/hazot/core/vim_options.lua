@@ -1,3 +1,10 @@
+-- Disable unused optional providers (removes the :checkhealth vim.provider warnings).
+-- These are only needed by legacy remote plugins, none of which are installed.
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_python3_provider = 0
+
 -- Numbers
 vim.opt.nu = true
 vim.opt.relativenumber = true
