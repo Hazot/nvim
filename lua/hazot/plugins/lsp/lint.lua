@@ -47,6 +47,17 @@ return {
             lint.linters.ruff.cmd = ruff_cmd()
         end
 
+        -- MD013 (line-length) flags table rows by default, which can't be
+        -- wrapped without breaking column alignment. Point at a global config
+        -- that exempts tables/code blocks, rather than relying on cli-relative discovery.
+        if lint.linters.markdownlint then
+            local home = vim.env.HOME
+            local cfg = home and (home .. "/.markdownlint.jsonc") or nil
+            if cfg and vim.fn.filereadable(cfg) == 1 then
+                lint.linters.markdownlint.args = { "--config", cfg, "--stdin" }
+            end
+        end
+
         -- Guarded lint trigger
         local aug = vim.api.nvim_create_augroup("plugin-lint", { clear = true })
         vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave", "TextChanged" }, {
