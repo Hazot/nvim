@@ -49,16 +49,58 @@ After installing everything, to make markdown-preview work, I needed to do
 - `yay -Syu ripgrep`
 - `cargo install fd-find`
 
-### Ubuntu `$HOME` Install
+### Ubuntu: build Neovim from source
 
-From `$HOME`, do:
+Source lives in `~/src/neovim` (all my from-source builds are in `~/src`; see
+`~/src/README.md`). Install prefix is `$HOME/.local`, whose `bin/` is already on
+`$PATH` — so no symlink and no `PATH` edit is needed.
 
 ```bash
-git clone https://github.com/neovim/neovim.git
-cd neovim
-make distclean
-make CMAKE_EXTRA_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/neovim"
+sudo apt install ninja-build gettext cmake curl build-essential -y
+git clone https://github.com/neovim/neovim.git ~/src/neovim
+cd ~/src/neovim
+git checkout stable                 # or a tag, e.g. v0.12.5
+make CMAKE_EXTRA_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/.local"
 make install
 ```
 
-Then add `export PATH="$HOME/neovim/bin:$PATH"` to your shell config or symlink it to bin.
+The prefix must go **inside `CMAKE_EXTRA_FLAGS`** — the Makefile greps it out of
+that variable. Don't add `make distclean` out of habit: it wipes `.deps` and
+forces a full dependency rebuild. Changing the prefix alone doesn't need it, the
+`checkprefix` target re-runs CMake on its own when the cached prefix differs.
+
+**Moving the repo is the exception**: CMake bakes absolute source paths into
+`build/CMakeCache.txt` and `.deps/CMakeCache.txt`, so a relocated tree dies with
+"does not match the source used to generate cache". Then you do need
+`make distclean` and a full dependency rebuild.
+
+To rebuild after a `git pull`, repeat the same two `make` lines.
+
+#### One-time migration off the old prefix
+
+The old build used `-DCMAKE_INSTALL_PREFIX=$HOME/neovim`, i.e. it installed into
+its own source tree, and `~/.local/bin/nvim` was a **symlink** to it. Before
+re-installing with the `$HOME/.local` prefix, delete that symlink — otherwise
+`cmake --install` follows it and writes back into the source tree:
+
+```bash
+rm ~/.local/bin/nvim                 # symlink, not a real binary
+rm -rf ~/src/neovim/bin ~/src/neovim/share   # stale install inside the repo
+```
+
+Those two directories are also why `git status` in the repo shows untracked
+`bin/` and `share/`.
+
+#### If you prefer a self-contained prefix instead
+
+Keeping the install inside the source tree works too, and then you *do* need the
+symlink, because `~/src/neovim/bin` isn't on `$PATH`:
+
+```bash
+make CMAKE_EXTRA_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/src/neovim"
+make install
+ln -sfn ~/src/neovim/bin/nvim ~/.local/bin/nvim
+```
+
+`ln -sfn` is deliberate: `-f` replaces an existing link, `-n` stops it from
+being created *inside* the old target directory if one is already there.
