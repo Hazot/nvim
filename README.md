@@ -61,4 +61,4 @@ make CMAKE_EXTRA_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX
 make install
 ```
 
-Then add `export PATH="$HOME/neovim/bin:$PATH"` to your shell config.
+Then add `export PATH="$HOME/neovim/bin:$PATH"` to your shell config or symlink it to bin.
