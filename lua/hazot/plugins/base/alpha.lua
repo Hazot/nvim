@@ -23,8 +23,8 @@ return {
         dashboard.section.buttons.val = {
             dashboard.button("a", "  > New File", "<cmd>ene<CR>"),
             dashboard.button("SPC o", "  > Oil File explorer", "<cmd>Oil<CR>"),
-            dashboard.button("SPC pf", "󰱼  > Search File", "<cmd>Telescope find_files<CR>"),
-            dashboard.button("SPC ps", "  > Search Global Word", "<cmd>Telescope live_grep<CR>"),
+            dashboard.button("SPC pf", "󰱼  > Search File", "<cmd>lua Snacks.picker.files()<CR>"),
+            dashboard.button("SPC ps", "  > Search Global Word", "<cmd>lua Snacks.picker.grep()<CR>"),
             dashboard.button("q", "  > Quit NVIM", "<cmd>qa<CR>"),
         }
 

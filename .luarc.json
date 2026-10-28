@@ -1,7 +1,6 @@
 {
     "diagnostics.globals": [
         "vim",
-        "group",
-        "lsp_keymaps"
+        "Snacks"
     ]
 }

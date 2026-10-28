@@ -15,7 +15,6 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
-vim.opt.autoindent = true
 
 -- Mouse
 vim.opt.mouse = "a"
@@ -26,16 +25,13 @@ vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.showbreak = "↪"
 
--- Backup and undo
+-- Swap and undo (undo files live in stdpath("state")/undo)
 vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
-vim.opt.hidden = true
 
--- Search
+-- Search (case-insensitive unless the pattern has a capital, like VS Code)
 vim.opt.hlsearch = false
-vim.opt.incsearch = true
+vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Colors
@@ -51,32 +47,22 @@ vim.opt.colorcolumn = { "80", "120" }
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
-vim.opt.updatetime = 50
-vim.opt.autoread = true
-
--- Show list
--- vim.opt.list = true
--- vim.opt.listchars = { tab = "» ", trail = "·", extends = ">", precedes = "<" }
--- vim.opt.listchars = { eol = "¬", tab = ">·", trail = "~", extends = ">", precedes = "<", space = "␣" }
+vim.opt.updatetime = 250
 
 -- Clipboard
 vim.opt.clipboard = "unnamedplus"
 
 -- Enable incrementing hex numbers and letters
-vim.api.nvim_set_option("nrformats", "hex,alpha")
+vim.opt.nrformats = { "hex", "alpha" }
 
--- Autocmds
-vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = { "*.md", "*.tex" },
-    group = group,
-    command = "setlocal wrap",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "cpp", "h" },
-    callback = function()
-        -- Can set to 2 here if I want
-        vim.opt_local.shiftwidth = 4
-        vim.opt_local.tabstop = 4
-    end,
-})
+-- `nvim some/dir` makes that dir the working directory (like `code some/dir`), so pickers stay inside it.
+-- The dir is read now because oil renames the buffer to `oil://...` before VimEnter.
+if vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1 then
+    local dir = vim.fn.fnamemodify(vim.fn.argv(0), ":p")
+    vim.api.nvim_create_autocmd("VimEnter", {
+        once = true,
+        callback = function()
+            vim.cmd.cd(vim.fn.fnameescape(dir))
+        end,
+    })
+end

@@ -1,4 +1,4 @@
 return {
-	"sindrets/diffview.nvim",
-	event = { "BufReadPre", "BufNewFile" },
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
 }
