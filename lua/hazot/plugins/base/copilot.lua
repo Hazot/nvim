@@ -2,6 +2,10 @@ return {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = { "BufReadPre", "BufNewFile" },
+    keys = {
+        { "<leader>ce", "<cmd>Copilot enable<CR>", desc = "Copilot enable" },
+        { "<leader>cd", "<cmd>Copilot disable<CR>", desc = "Copilot disable" },
+    },
     opts = {
         should_attach = function(bufnr, bufname)
             local bt = vim.bo[bufnr].buftype
