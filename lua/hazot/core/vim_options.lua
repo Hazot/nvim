@@ -29,7 +29,7 @@ vim.opt.showbreak = "↪"
 vim.opt.swapfile = false
 vim.opt.undofile = true
 
--- Search (case-insensitive unless the pattern has a capital, like VS Code)
+-- Search (case-insensitive unless the pattern has a capital)
 vim.opt.hlsearch = false
 vim.opt.ignorecase = true
 vim.opt.smartcase = true

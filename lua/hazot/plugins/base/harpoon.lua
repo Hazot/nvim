@@ -2,6 +2,21 @@ return {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = "nvim-lua/plenary.nvim",
+    -- <leader>m for "mark": <leader>a* belongs to claudecode
+    keys = {
+        { "<leader>m", function() require("harpoon"):list():add() end, desc = "Harpoon add" },
+        {
+            "<C-e>",
+            function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end,
+            desc = "Harpoon menu",
+        },
+        { "<C-h>", function() require("harpoon"):list():select(1) end, desc = "Harpoon file 1" },
+        { "<C-j>", function() require("harpoon"):list():select(2) end, desc = "Harpoon file 2" },
+        { "<C-k>", function() require("harpoon"):list():select(3) end, desc = "Harpoon file 3" },
+        { "<C-l>", function() require("harpoon"):list():select(4) end, desc = "Harpoon file 4" },
+        { "<C-S-P>", function() require("harpoon"):list():prev() end, desc = "Harpoon prev file" },
+        { "<C-S-N>", function() require("harpoon"):list():next() end, desc = "Harpoon next file" },
+    },
     config = function()
         -- REQUIRED
         require("harpoon"):setup({
@@ -16,7 +31,7 @@ return {
                 key = function()
                     return vim.uv.cwd()
                 end,
-            }
+            },
         })
-    end
+    end,
 }

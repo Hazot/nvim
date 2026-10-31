@@ -4,9 +4,9 @@ return {
     event = { "InsertEnter", "CmdlineEnter" },
     opts = {
         keymap = {
-            -- VS Code-like: <CR> accepts the LSP item, <C-Space> opens the menu, <C-e> closes it
+            -- <CR> accepts the LSP item, <C-Space> opens the menu, <C-e> closes it
             preset = "enter",
-            -- <Tab> (VS Code-like): accepts the menu item when the menu is open, else the Copilot ghost text,
+            -- tab accepts the menu item when the menu is open, else the copilot ghost text,
             -- else jumps in a snippet, else inserts a tab
             ["<Tab>"] = {
                 "select_and_accept",

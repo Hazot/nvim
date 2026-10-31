@@ -4,9 +4,8 @@
 
 Where custom maps are defined:
 
-- `lua/hazot/core/remaps_vim.lua`: general editing
-- `lua/hazot/core/remaps_plugins.lua`: Oil, Harpoon, Copilot toggles
-- In each plugin spec (`keys = { ... }` or `on_attach`): snacks pickers, gitsigns, conform, claudecode, blink, LSP
+- `lua/hazot/core/remaps_vim.lua`: general editing (no plugin needed)
+- In each plugin's own file (`keys = { ... }` or `on_attach`): Oil, Harpoon, Copilot, snacks pickers, gitsigns, conform, claudecode, blink, LSP
 
 ## Files and search
 
@@ -100,7 +99,7 @@ Inside a picker: `<C-j>` / `<C-k>` move, `<CR>` opens, `<Esc>` closes, `<A-h>` t
 | `<leader>gs` | Changed files picker (with diff preview) |
 | `<leader>gc` / `<leader>gfc` | Commits / commits of this file |
 | `<leader>gb` | Branches |
-| `:DiffviewOpen` | VS Code-like review of all changes (`:DiffviewClose`) |
+| `:DiffviewOpen` | Review of all changes (`:DiffviewClose`) |
 
 ## Claude Code
 
