@@ -53,3 +53,6 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 
 -- Set ctrl+backspace to delete words like C-w
 vim.keymap.set("i", "<C-H>", "<C-W>", { desc = "Delete word before cursor (Ctrl+Backspace)" })
+
+-- Leave a terminal (e.g. Claude Code) straight to the window on the left
+vim.keymap.set("t", "<C-h>", [[<C-\><C-n><C-w>h]], { desc = "Terminal: go to left window" })

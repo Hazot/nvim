@@ -1,6 +1,6 @@
 # Keymaps cheat sheet
 
-`<leader>` is **Space**. Search every active keymap (with its description) with `<leader>fk`.
+`<leader>` is **Space**. Search every active keymap (with its description) and Vim's built-in commands (tagged `[builtin]`, try "fold") with `<leader>fk`. `<CR>` runs a keymap, but opens the help page of a built-in.
 
 Where custom maps are defined:
 
@@ -16,7 +16,7 @@ Where custom maps are defined:
 | `<leader>ps` | Grep text in files |
 | `<leader>fb` | Open buffers |
 | `<leader>fh` | Help tags |
-| `<leader>fk` | Search keymaps |
+| `<leader>fk` | Search keymaps and Vim built-ins |
 | `<leader>o` / `<leader>pv` | Oil: file explorer (edit the folder like text, `:w` to apply) |
 | `<leader>-` | Oil in a float |
 
@@ -112,7 +112,7 @@ Inside a picker: `<C-j>` / `<C-k>` move, `<CR>` opens, `<Esc>` closes, `<A-h>` t
 | `<leader>as` in visual | Send selection |
 | `<leader>ay` / `<leader>an` | Accept / reject proposed diff |
 
-In the Claude terminal: **Esc twice** to leave typing mode, then `<C-w>` + direction to change window; `i` to type again.
+In the Claude terminal: `<C-h>` jumps to the window on the left. `<C-\><C-n>` or **Esc twice** leaves typing mode, then `<C-w>` + direction to change window; `i` to type again.
 
 ## Windows
 
