@@ -19,6 +19,7 @@ Where custom maps are defined:
 | `<leader>fk` | Search keymaps and Vim built-ins |
 | `<leader>o` / `<leader>pv` | Oil: file explorer (edit the folder like text, `:w` to apply) |
 | `<leader>-` | Oil in a float |
+| `<leader>e` | File tree sidebar (mouse works; `s` stages / unstages, `a` / `d` / `r` add / delete / rename) |
 
 Inside a picker: `<C-j>` / `<C-k>` move, `<CR>` opens, `<Esc>` closes, `<A-h>` toggles hidden files, `<A-i>` toggles ignored files.
 
@@ -100,6 +101,8 @@ Inside a picker: `<C-j>` / `<C-k>` move, `<CR>` opens, `<Esc>` closes, `<A-h>` t
 | `<leader>gc` / `<leader>gfc` | Commits / commits of this file |
 | `<leader>gb` | Branches |
 | `:DiffviewOpen` | Review of all changes (`:DiffviewClose`) |
+
+Merge conflicts (`:DiffviewOpen` during a merge shows ours / result / theirs): `]x` / `[x` next / previous conflict, `<leader>co` / `<leader>ct` keep ours / theirs, `<leader>cb` / `<leader>ca` keep base / all, `dx` delete the conflict region.
 
 ## Claude Code
 

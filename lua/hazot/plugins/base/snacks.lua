@@ -151,10 +151,14 @@ return {
             sources = {
                 files = { hidden = true, ignored = true, exclude = { ".git", ".venv", "node_modules" } },
                 grep = { hidden = true, ignored = true, exclude = { ".git", ".venv", "node_modules" } },
+                -- `s` stages / unstages the file under the cursor (or the selection) from the tree
+                explorer = { win = { list = { keys = { ["s"] = "git_stage" } } } },
             },
         },
+        explorer = { enabled = true },
     },
     keys = {
+        { "<leader>e", function() Snacks.explorer() end, desc = "File tree (sidebar)" },
         { "<leader>pf", function() Snacks.picker.files() end, desc = "Find files" },
         {
             "<C-p>",
