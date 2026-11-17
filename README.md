@@ -3,10 +3,11 @@
 ## Requirements
 
 > **Mason is optional.** This config does **not** rely on Mason to install
-> anything. Every language server and formatter is resolved from `$PATH`
-> (mason's `bin/` dir is appended to it at startup, so anything installed with
-> `:Mason` is picked up too). Diagnostics come from the LSPs (ruff, ty, ...),
-> there is no separate linter.
+> anything. Every language server and formatter is resolved from `$PATH`.
+> Mason's `bin/` dir is prepended to it at startup, so anything installed with
+> `:Mason` is picked up too and takes precedence over the system copy.
+> Diagnostics come from the LSPs (ruff, ty, ...), there is no separate linter,
+> so linters like `markdownlint` are never used.
 
 ### Tooling reference (must be on `$PATH`)
 
@@ -20,11 +21,14 @@
 - `cargo install ripgrep fd-find tree-sitter-cli stylua`
 - `sudo apt install python3-venv clangd clang-format shfmt -y`
 - `uv tool install ruff && uv tool install pyproject-fmt && uv tool install ty && uv tool install mdformat`
-- `brew install oxfmt` (linuxbrew; formats json/yaml/html/css/js/ts — not cargo-installable)
 - `rustup component add rust-analyzer`
-- lua-language-server: `brew install lua-language-server` (linuxbrew), or grab a
-  release from <https://github.com/LuaLS/lua-language-server/releases> and put it
-  on `$PATH`
+- Via Mason (no linuxbrew needed): `:MasonInstall oxfmt lua-language-server`
+  - `oxfmt` formats json/yaml/html/css/js/ts; it's not cargo-installable and has
+    no apt package
+  - optionally add `clangd` for a newer version than apt's (Mason's copy wins
+    over `/usr/bin/clangd`)
+  - alternative without Mason: `brew install oxfmt lua-language-server`
+    (linuxbrew)
 
 After installing everything, to make markdown-preview work, I needed to do
 `:call mkdp#util#install()`.
@@ -47,7 +51,7 @@ After installing everything, to make markdown-preview work, I needed to do
 
 Source lives in `~/src/neovim` (all my from-source builds are in `~/src`; see
 `~/src/README.md`). Install prefix is `$HOME/.local`, whose `bin/` is already on
-`$PATH` — so no symlink and no `PATH` edit is needed.
+`$PATH`, so no symlink and no `PATH` edit is needed.
 
 ```bash
 sudo apt install ninja-build gettext cmake curl build-essential -y
@@ -58,7 +62,7 @@ make CMAKE_EXTRA_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX
 make install
 ```
 
-The prefix must go **inside `CMAKE_EXTRA_FLAGS`** — the Makefile greps it out of
+The prefix must go **inside `CMAKE_EXTRA_FLAGS`**: the Makefile greps it out of
 that variable. Don't add `make distclean` out of habit: it wipes `.deps` and
 forces a full dependency rebuild. Changing the prefix alone doesn't need it, the
 `checkprefix` target re-runs CMake on its own when the cached prefix differs.
@@ -74,7 +78,7 @@ To rebuild after a `git pull`, repeat the same two `make` lines.
 
 The old build used `-DCMAKE_INSTALL_PREFIX=$HOME/neovim`, i.e. it installed into
 its own source tree, and `~/.local/bin/nvim` was a **symlink** to it. Before
-re-installing with the `$HOME/.local` prefix, delete that symlink — otherwise
+re-installing with the `$HOME/.local` prefix, delete that symlink, otherwise
 `cmake --install` follows it and writes back into the source tree:
 
 ```bash
